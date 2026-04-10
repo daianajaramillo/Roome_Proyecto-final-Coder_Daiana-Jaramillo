@@ -43,4 +43,6 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 
-
+## 📺 Demostración en Video
+Puedes ver el funcionamiento de la plataforma en el siguiente enlace:
+https://www.loom.com/share/905173fda7ad47ce917ebd3c61950c52  
