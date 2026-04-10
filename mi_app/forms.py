@@ -1,10 +1,23 @@
 from django import forms
+from .models import Alojamiento 
+from ckeditor.widgets import CKEditorWidget
+from accounts.models import Avatar
+from .models import Reserva  
 
-class AlojamientoForm(forms.Form):
-    nombre = forms.CharField(max_length=100)
-    ciudad = forms.CharField(max_length=100)
-    precio_por_noche = forms.IntegerField()
-    capacidad_personas = forms.IntegerField()
+class AlojamientoForm(forms.ModelForm):
+    class Meta:
+        model = Alojamiento
+        fields = [
+            'nombre', 
+            'ciudad', 
+            'precio_por_noche', 
+            'capacidad_personas', 
+            'descripcion', 
+            'imagen'
+        ]
+        widgets = {
+            'descripcion': CKEditorWidget(),
+        }
 
 class AnfitrionForm(forms.Form):
     nombre = forms.CharField(max_length=100)
@@ -13,12 +26,22 @@ class AnfitrionForm(forms.Form):
     telefono = forms.CharField(max_length=20)
     idiomas = forms.CharField(max_length=100)
 
-class ReservaForm(forms.Form):
-    nombre_viajero = forms.CharField(max_length=100)
-    fecha_inicio = forms.DateField(widget=forms.SelectDateWidget)
-    fecha_fin = forms.DateField(widget=forms.SelectDateWidget)
-    cantidad_huespedes = forms.IntegerField(initial=1)
+class ReservaForm(forms.ModelForm): 
+    class Meta:
+        model = Reserva
+        fields = ['fecha_inicio', 'fecha_fin', 'cantidad_huespedes']
+        
+        widgets = {
+            'fecha_inicio': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_fin': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 #Form para buscar en BD
 class BuscarAlojamientoForm(forms.Form):
     ciudad = forms.CharField(max_length=100)
+
+#Avatar
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ['imagen']

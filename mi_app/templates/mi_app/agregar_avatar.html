@@ -1,0 +1,13 @@
+{% extends "mi_app/base.html" %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+    <h2>Subir Foto de Perfil</h2>
+    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="background: #5a2d82; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Guardar Foto
+        </button>
+    </form>
+</div>
+{% endblock %}

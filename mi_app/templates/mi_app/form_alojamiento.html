@@ -1,10 +1,15 @@
 {% extends "mi_app/base.html" %}
 
 {% block content %}
-    <h1>Cargar Nuevo Alojamiento</h1>
-    <form action="" method="POST">
+    {{ form.media }}
+    <h2>Cargar/Editar Alojamiento</h2>
+
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ mi_form.as_p }}
-        <button type="submit">Guardar Alojamiento</button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Alojamiento</button>
     </form>
+
+    <hr>
+    <a href="{% url 'alojamiento_list' %}" class="btn btn-secondary">Cancelar</a>
 {% endblock %}

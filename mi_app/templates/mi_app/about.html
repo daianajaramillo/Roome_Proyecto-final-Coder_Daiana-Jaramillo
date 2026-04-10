@@ -1,0 +1,47 @@
+{% extends "mi_app/base.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #2c3e50; font-size: 2.5em;">Acerca de mí</h1>
+        <div style="width: 60px; height: 4px; background-color: #3498db; margin: 10px auto;"></div>
+    </div>
+
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center;">
+        
+        <div style="flex: 1; min-width: 250px; text-align: center;">
+            <img src="/media/Avatares/Daiana.png" 
+                 alt="Foto de Perfil" 
+                 style="width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 5px solid #f8f9fa; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+        </div>
+
+        <div style="flex: 2; min-width: 300px;">
+            <h2 style="color: #2c3e50; margin-top: 0;">Hola, soy Daiana Jaramillo</h2>
+            <p style="font-size: 1.1em; line-height: 1.6; color: #444;">
+                Actualmente me desempeño como Analista Cuantitativo, 
+                donde utilizo Python para el desarrollo y validacion de modelos y análisis de datos.
+                Más allá de los números y los modelos, <strong>me apasiona viajar y conocer nuevos lugares y culturas</strong>.
+            </p>
+            <p style="font-size: 1.1em; line-height: 1.6; color: #444;">
+                Este sitio es el <strong>Proyecto Final</strong> de mi curso de Python en Coderhouse. 
+                Aquí busqué integrar mis capacidades analíticas con el desarrollo web, 
+                utilizando el framework <strong>Django</strong> para crear una plataforma funcional 
+                de alojamientos temporarios. 
+            </p>
+
+            <div style="margin-top: 25px; display: flex; gap: 15px;">
+                <a href="https://www.linkedin.com/in/daiana-jaramillo-6034bb15b/" target="_blank" 
+                   style="background: #0077b5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s;">
+                   LinkedIn
+                </a>
+
+                <a href="https://github.com/daianajaramillo" target="_blank" 
+                   style="background: #333; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s;">
+                   GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

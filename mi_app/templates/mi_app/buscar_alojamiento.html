@@ -1,28 +1,53 @@
-{% extends "mi_app/base.html" %}
+{% extends 'mi_app/base.html' %}
 
 {% block content %}
-    <h1>Buscar Alojamiento por Ciudad</h1>
-
-    <form action="{% url 'buscar_alojamiento' %}" method="GET">
-        <input type="text" name="ciudad" placeholder="Ej: Buenos Aires">
-        <button type="submit">Buscar</button>
-    </form>
-
-    <hr>
-
+<div style="max-width: 1100px; margin: 0 auto; padding: 20px;">
+    
     {% if busqueda_realizada %}
+        <h1 style="font-weight: 600; margin-bottom: 30px;">
+            Resultados para "{{ ciudad }}"
+        </h1>
+
         {% if alojamientos %}
-            <h3>Resultados para "{{ ciudad }}":</h3>
-            <ul>
-                {% for aloj in alojamientos %}
-                    <li><strong>{{ aloj.nombre }}</strong> - Ubicación: {{ aloj.ciudad }}</li>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
+                {% for alojamiento in alojamientos %}
+                    <div style="background: white; border-radius: 18px; overflow: hidden; border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s;">
+                        
+                        {% if alojamiento.imagen %}
+                            <img src="{{ alojamiento.imagen.url }}" style="width: 100%; height: 220px; object-fit: cover;">
+                        {% else %}
+                            <div style="width: 100%; height: 220px; background: #eee; display: flex; align-items: center; justify-content: center; color: #999;">Sin imagen</div>
+                        {% endif %}
+
+                        <div style="padding: 20px;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.25em; color: var(--texto);">{{ alojamiento.nombre }}</h3>
+                            <p style="color: var(--gris-suave); font-size: 0.95em; margin: 5px 0;">📍 {{ alojamiento.ciudad }}</p>
+                            <p style="font-weight: 700; color: var(--primario); font-size: 1.1em; margin: 15px 0;">${{ alojamiento.precio_por_noche }} <span style="font-weight: 400; font-size: 0.8em; color: #666;">/ noche</span></p>
+                            
+                            <a href="{% url 'alojamiento_detalle' alojamiento.id %}" 
+                               style="display: block; text-align: center; background: #f0f0f0; color: var(--texto); text-decoration: none; padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.9em; transition: 0.2s;">
+                               Ver detalles
+                            </a>
+                        </div>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         {% else %}
-            <p>No se encontraron alojamientos en <strong>{{ ciudad }}</strong>. Intenta con otra ciudad.</p>
+            <div style="text-align: center; padding: 80px 20px;">
+                <span style="font-size: 4em;">🔍</span>
+                <h2 style="color: #888; font-weight: 400;">No encontramos alojamientos en "{{ ciudad }}"</h2>
+                <p style="color: #bbb;">Prueba con otra ciudad o revisa la ortografía.</p>
+                <a href="{% url 'alojamiento_list' %}" style="color: var(--primario); font-weight: 600; text-decoration: none;">Ver todos los alojamientos</a>
+            </div>
         {% endif %}
+
+    {% else %}
+        <div style="text-align: center; padding: 100px 20px;">
+            <h2 style="color: var(--texto);">¿Qué estás buscando?</h2>
+            <p style="color: var(--gris-suave);">Utiliza el buscador de la página de inicio para encontrar tu lugar ideal.</p>
+            <a href="{% url 'inicio' %}" style="display: inline-block; margin-top: 20px; background: var(--primario); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600;">Volver al Inicio</a>
+        </div>
     {% endif %}
 
-    <br>
-    <a href="{% url 'inicio' %}">Volver al inicio</a>
+</div>
 {% endblock %}

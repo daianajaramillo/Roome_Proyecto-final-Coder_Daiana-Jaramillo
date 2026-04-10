@@ -1,0 +1,73 @@
+{% extends "mi_app/base.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h1>{{ alojamiento.nombre }}</h1>
+    
+    <div style="margin-bottom: 15px; color: #555;">
+        <p>Publicado el: {{ alojamiento.fecha_publicacion|date:"d/m/Y" }} | 
+           Anfitrión: <strong>{{ alojamiento.anfitrion.username }}</strong>
+        </p>
+    </div>
+    
+    <hr>
+
+    {% if alojamiento.imagen %}
+        <img src="{{ alojamiento.imagen.url }}" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" alt="{{ alojamiento.nombre }}">
+    {% endif %}
+
+    <div style="display: flex; justify-content: space-between; background: #f9f9f9; padding: 15px; border-radius: 5px; align-items: center;">
+        <div>
+            <p style="margin: 0;"><strong>Ciudad:</strong> {{ alojamiento.ciudad }}</p>
+            <p style="margin: 0;"><strong>Capacidad:</strong> {{ alojamiento.capacidad_personas }} personas</p>
+            <p style="margin: 0;"><strong>Precio:</strong> ${{ alojamiento.precio_por_noche }} por noche</p>
+        </div>
+
+        <div>
+            {% if user.is_authenticated %}
+                {% if user == alojamiento.anfitrion or user.is_superuser %}
+                    <span style="color: #888; font-style: italic; font-size: 0.9em;">
+                        {% if user.is_superuser %}Modo Administrador{% else %}Tu publicación{% endif %}
+                    </span>
+                {% else %}
+                    <a href="{% url 'crear_reserva' alojamiento.id %}" 
+                       style="background: #FF385C; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                       Reservar ahora
+                    </a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}" style="color: #FF385C; font-weight: bold;">Inicia sesión para reservar</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3>Descripción</h3>
+        {{ alojamiento.descripcion|safe }}
+    </div>
+
+    <hr style="margin-top: 40px;">
+    
+    <div style="margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="{% url 'alojamiento_list' %}" style="text-decoration: none; color: #555; font-weight: 500;">
+            <i class="fas fa-chevron-left"></i> Volver al catálogo
+        </a>
+        
+        {% if user.is_authenticated and user == alojamiento.anfitrion or user.is_superuser %}
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span style="font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">Gestión:</span>
+                
+                <a href="{% url 'alojamiento_editar' alojamiento.id %}" 
+                   style="text-decoration: none; color: #222; font-weight: 600; padding: 6px 12px; border: 1px solid #222; border-radius: 8px; font-size: 0.9em;">
+                   Editar
+                </a>
+                
+                <a href="{% url 'alojamiento_borrar' alojamiento.id %}" 
+                   style="text-decoration: none; color: #e74c3c; font-weight: 600; font-size: 0.9em;">
+                   Eliminar
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

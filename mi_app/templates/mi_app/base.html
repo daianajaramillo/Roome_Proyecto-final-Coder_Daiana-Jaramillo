@@ -1,33 +1,194 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Bienvenido a Sitio de alojamientos temporarios</title>
+    <meta charset="UTF-8">
+    <title>{% block title %}Roome - Alojamientos{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
-
-        nav li {
-            display: inline;
-            margin-right: 20px;
+        :root {
+            --primario: #bc42f5; 
+            --fondo: #f7f7f7;
+            --texto: #222222;
+            --blanco: #ffffff;
+            --gris-suave: #717171;
         }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            background-color: var(--fondo); 
+            color: var(--texto);
+        }
+
+        /* Header */
+        header {
+            background: var(--blanco);
+            padding: 12px 5%;
+            box-shadow: 0 1px 12px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr; 
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { 
+            font-size: 1.6em; 
+            font-weight: bold; 
+            color: var(--primario); 
+            text-decoration: none; 
+            justify-self: start;
+        }
+
+        /* Menú Central */
+        .menu-central { justify-self: center; }
+        .menu-central ul { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            display: flex; 
+            gap: 30px; 
+        }
+
+        /* Clases para los links del menú  */
+        .nav-link {
+            text-decoration: none;
+            color: var(--texto);
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: 0.2s;
+        }
+        .nav-link:hover { color: var(--primario); }
+
+        /* tab activa */
+        .nav-link-active {
+            color: var(--primario) !important;
+            font-weight: 600 !important;
+        }
+
+        /* Contenedor Derecha */
+        .auth-container { 
+            justify-self: end; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        .user-profile { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: #f0f0f0; 
+            padding: 6px 14px; 
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--texto);
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .avatar-nav { height: 24px; width: 24px; border-radius: 50%; object-fit: cover; }
+
+        .btn-logout {
+            background: none; border: none; color: var(--gris-suave); 
+            cursor: pointer; font-size: 0.85em; text-decoration: underline; padding: 0;
+        }
+
+        .btn-registro {
+            text-decoration: none; 
+            color: var(--primario); 
+            font-weight: 600; 
+            font-size: 0.9em; 
+            border: 1px solid var(--primario); 
+            padding: 6px 15px; 
+            border-radius: 8px;
+        }
+
+        /* Mensajes y Main */
+        .messages { padding: 15px 5%; }
+        .alert { padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.9em; }
+        .alert-success { background-color: #e6fcf5; color: #0ca678; }
+
+        main { padding: 20px 5%; min-height: 80vh; }
+        footer { padding: 30px; background: #fff; border-top: 1px solid #eee; text-align: center; font-size: 0.85em; color: var(--gris-suave); }
     </style>
 </head>
 <body>
-    <h1>Sitio de alojamientos temporarios</h1>
-    
-    <nav>
-        <ul>
-            <li><a href="{% url 'inicio' %}">Inicio</a></li>
-            <li><a href="{% url 'form_alojamiento' %}">Alojamiento</a></li>
-            <li><a href="{% url 'form_anfitrion' %}">Anfitrión</a></li>
-            <li><a href="{% url 'form_reserva' %}">Reserva</a></li>
-            <li><a href="{% url 'buscar_alojamiento' %}">Buscar Alojamiento</a></li>
-        </ul>
-    </nav>
-    <hr>
 
-    {% block content %}
-    {% endblock %}
+    <header>
+        <a href="{% url 'inicio' %}" class="logo">Roome</a>
 
-    <hr>
+        <nav class="menu-central">
+            <ul>
+                <li>
+                    <a href="{% url 'inicio' %}" 
+                       class="nav-link {% if request.resolver_match.url_name == 'inicio' %}nav-link-active{% endif %}">
+                       Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'alojamiento_list' %}" 
+                       class="nav-link {% if request.resolver_match.url_name == 'alojamiento_list' %}nav-link-active{% endif %}">
+                       Explorar
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'mis_viajes' %}" 
+                       class="nav-link {% if request.resolver_match.url_name == 'mis_viajes' %}nav-link-active{% endif %}">
+                       Mis Viajes
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'about' %}" 
+                       class="nav-link {% if request.resolver_match.url_name == 'about' %}nav-link-active{% endif %}">
+                       Acerca de mí
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="auth-container">
+            {% if user.is_authenticated %}
+                <a href="{% url 'editar_perfil' %}" class="user-profile">
+                    {% if user.user_avatar.imagen %}
+                        <img src="{{ user.user_avatar.imagen.url }}" class="avatar-nav">
+                    {% else %}
+                        <span>👤</span>
+                    {% endif %}
+                    {{ user.username }}
+                </a>
+                
+                <form action="{% url 'logout' %}" method="POST" style="display: inline; margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Salir</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" style="text-decoration:none; color: var(--texto); font-size: 0.9em;">Iniciar Sesión</a>
+                <a href="{% url 'registro' %}" class="btn-registro">Regístrate</a>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-success"> {{ message }} </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Roome Inc. - <a href="{% url 'about' %}" style="color: var(--gris-suave);">Acerca de mí</a></p>
+    </footer>
 
 </body>
 </html>

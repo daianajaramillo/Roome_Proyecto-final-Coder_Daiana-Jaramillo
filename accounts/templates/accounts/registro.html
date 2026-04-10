@@ -1,0 +1,39 @@
+{% extends "mi_app/base.html" %}
+
+{% block title %} Registro {% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+    <h2>Crear una nueva cuenta</h2>
+
+    {% if form.errors %}
+        <div style="color: red; background: #ffe6e6; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+            <p><strong>Por favor corregí los siguientes errores:</strong></p>
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div style="margin-bottom: 15px;">
+                <label><strong>{{ field.label }}</strong></label><br>
+                {{ field }}
+                {% if field.help_text %}
+                    <br><small style="color: #666;">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <br><span style="color: red; font-size: 0.85em;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" style="background: #5a2d82; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Registrarme
+        </button>
+    </form>
+    
+    <p style="margin-top: 15px;">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+</div>
+{% endblock %}

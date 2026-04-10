@@ -1,0 +1,9 @@
+{% extends "mi_app/base.html" %}
+
+{% block content %}
+<div style="text-align: center; margin-top: 50px;">
+    <h2>Has cerrado sesión correctamente</h2>
+    <p>¡Gracias por visitarnos!</p>
+    <a href="{% url 'login' %}">Volver a ingresar</a>
+</div>
+{% endblock %}

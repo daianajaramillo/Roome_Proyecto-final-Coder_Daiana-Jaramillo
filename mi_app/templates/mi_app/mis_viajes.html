@@ -1,0 +1,21 @@
+{% extends 'mi_app/base.html' %}
+{% block content %}
+<div style="max-width: 800px; margin: 20px auto;">
+    <h1 style="font-weight: 600;">✈️ Mis Viajes</h1>
+    <p style="color: #666;">Aquí puedes ver todas tus reservas actuales en Roome.</p>
+
+    <div style="margin-top: 30px;">
+        {% for r in reservas %}
+            <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; justify-content: space-between;">
+                <div>
+                    <h3 style="margin: 0;">{{ r.alojamiento.nombre }}</h3>
+                    <p style="margin: 5px 0;">Check-in: {{ r.fecha_inicio }} | Check-out: {{ r.fecha_fin }}</p>
+                </div>
+                <span style="color: #bc42f5; font-weight: bold;">Confirmada</span>
+            </div>
+        {% empty %}
+            <p>Aún no has realizado ninguna reserva.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

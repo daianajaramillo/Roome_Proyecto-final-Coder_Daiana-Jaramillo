@@ -1,0 +1,60 @@
+{% extends "mi_app/base.html" %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Catálogo de Alojamientos</h2>
+
+{% if user.is_authenticated %}
+    {% if user.is_staff or user.is_superuser %}
+        <div style="text-align: right; margin-bottom: 20px;">
+            <a href="{% url 'alojamiento_crear' %}" 
+               style="background: #5a2d82; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9em;">
+                + Cargar Nuevo Alojamiento
+            </a>
+        </div>
+    {% else %}
+        <p style="color: #666; font-style: italic;">¡Explora nuestros destinos y reserva tu próxima estadía!</p>
+    {% endif %}
+{% else %}
+    <p style="color: #666; font-size: 0.8em;">
+        ¿Tienes un alojamiento? <a href="{% url 'login' %}">Inicia sesión</a> para publicarlo.
+    </p>
+{% endif %}
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">
+    {% for alojamiento in alojamientos %}
+        <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; width: 250px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            
+            {% if alojamiento.imagen %}
+                <img src="{{ alojamiento.imagen.url }}" alt="{{ alojamiento.nombre }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px;">
+            {% else %}
+                <div style="background: #eee; height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 4px;">Sin foto</div>
+            {% endif %}
+
+            <h3 style="margin: 10px 0 5px 0; font-size: 1.2em;">{{ alojamiento.nombre }}</h3>
+            
+            <p style="margin: 0; font-size: 0.9em;"><strong>Ciudad:</strong> {{ alojamiento.ciudad }}</p>
+            
+            <p style="margin: 5px 0; font-size: 0.9em; color: #555;">
+                <strong>Anfitrión:</strong> {{ alojamiento.anfitrion.username }}
+            </p>
+            
+            <p style="margin: 0; font-size: 0.9em;"><strong>Precio:</strong> ${{ alojamiento.precio }}</p>
+            
+            <div style="margin-top: 15px;">
+                <a href="{% url 'alojamiento_detalle' alojamiento.id %}" style="text-decoration: none; color: #5a2d82; font-weight: bold;">Ver más</a>
+                
+                {% if user.is_authenticated and user == alojamiento.anfitrion or user.is_superuser %}
+                    <span style="color: #ccc; margin: 0 5px;">|</span>
+                    <a href="{% url 'alojamiento_editar' alojamiento.id %}" style="text-decoration: none; color: #222; font-weight: 600; font-size: 0.9em;">Editar</a>
+                {% endif %}
+            </div>
+        </div> 
+        {% empty %}
+        <p>No hay alojamientos disponibles.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
